@@ -1,3 +1,6 @@
+// only dungeon part of https://github.com/munificent/hauberk
+// see: https://github.com/munificent/hauberk/blob/master/lib/src/content/dungeon.dart
+
 var defaults = {
   seed: 12345678,
   rows: 200,
