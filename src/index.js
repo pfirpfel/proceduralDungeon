@@ -69,7 +69,7 @@ function Dungeon(seed, rows, cols){
 
   this.print = function(){
     _printStage(dungeonInstance.stage);
-  }
+  };
 }
 
 function _printStage(stage){
