@@ -56,17 +56,31 @@ function Stage(rows, cols){
 }
 
 function Dungeon(seed, rows, cols){
+  var dungeonInstance = this;
   this.seed = seed || defaults.seed;
-
   this.rows = rows || defaults.rows;
   this.cols = cols || defaults.cols;
 
   this.stage = new Stage(this.rows, this.cols);
 
   var rng = new random(this.seed);
-  
+
   _addRooms(this.stage, rng, 3, 9, 100);
 
+  this.print = function(){
+    _printStage(dungeonInstance.stage);
+  }
+}
+
+function _printStage(stage){
+  var x, y, row;
+  for(x = 0; x < stage.rows; x++){
+    row = "";
+    for(y = 0; y < stage.cols; y++){
+      row += (stage.tiles[x][y].type === 0) ? '#' : ' ';
+    }
+    console.log(row);
+  }
 }
 
 function _addRooms(stage, rng, minSize, maxSize, attempts){
