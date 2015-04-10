@@ -4,7 +4,8 @@
 var defaults = {
   seed: 12345678,
   rows: 50,
-  cols: 50
+  cols: 50,
+  comfortZone: 1
 };
 var random = require('./random.js');
 
@@ -26,17 +27,29 @@ function Room(x, y, width, height, tiles){
   this.width = width;
   this.height = height;
   this.tiles = tiles || [];
-  
-  this.intersects = function(other){
-    return (this.x > other.x
-    && this.x < (other.x + other.width)
-    && this.y > other.y
-    && this.y < (other.y + other.height))
-    ||
-    ((this.x + this.width) > other.x
-    && (this.x + this.width) < (other.x + other.width)
-    && (this.y + this.height) > other.y
-    && (this.y + this.height) < (other.y + other.height));
+
+  this.withinComfortZone = function(other){
+    var topLeft = other.x > (this.x - defaults.comfortZone)
+    && other.x < (this.x + this.width + defaults.comfortZone)
+    && other.y > (this.y - defaults.comfortZone)
+    && other.y < (this.y + this.height + defaults.comfortZone);
+
+    var topRight = (other.x + other.width) > (this.x - defaults.comfortZone)
+    && (other.x + other.width) < (this.x + this.width + defaults.comfortZone)
+    && other.y > (this.y - defaults.comfortZone)
+    && other.y < (this.y + this.height + defaults.comfortZone);
+
+    var bottomLeft = other.x > (this.x - defaults.comfortZone)
+    && other.x < (this.x + this.width + defaults.comfortZone)
+    && (other.y + other.height) > (this.y - defaults.comfortZone)
+    && (other.y + other.height) < (this.y + this.height + defaults.comfortZone);
+
+    var bottomRight= (other.x + other.width) > (this.x - defaults.comfortZone)
+    && (other.x + other.width) < (this.x + this.width + defaults.comfortZone)
+    && (other.y + other.height) > (this.y - defaults.comfortZone)
+    && (other.y + other.height) < (this.y + this.height + defaults.comfortZone);
+
+    return topLeft || topRight || bottomLeft || bottomRight;
   };
 }
 
@@ -104,7 +117,7 @@ function _addRooms(stage, rng, minSize, maxSize, attempts){
     
     var overlaps = false;
     for(var r = 0; r < stage.rooms.length; r++){
-      if(room.intersects(stage.rooms[r])){ // instead of intersects, have at least a distance of 1
+      if(room.withinComfortZone(stage.rooms[r])){
         overlaps = true;
         break;
       }
