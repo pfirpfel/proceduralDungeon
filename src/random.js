@@ -13,6 +13,6 @@ module.exports = function(seed){
   };
 
   this.isOneIn = function(all){
-    return (mt.int() % (all + 1)) === 0;
+    return (mt.int() % all) === 0;
   };
 };
