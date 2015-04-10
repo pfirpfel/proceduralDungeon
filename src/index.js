@@ -3,8 +3,8 @@
 
 var defaults = {
   seed: 12345678,
-  rows: 200,
-  cols: 200
+  rows: 50,
+  cols: 50
 };
 var random = require('./random.js');
 
@@ -45,9 +45,9 @@ function Stage(rows, cols){
   this.cols = (cols % 2 == 1) ? cols : cols + 1;
 
   this.tiles = [];
-  for(var i = 0; i < rows; i++){
+  for(var i = 0; i < this.rows; i++){
     this.tiles[i] = [];
-    for(var j = 0; j < cols; j++){
+    for(var j = 0; j < this.cols; j++){
       this.tiles[i][j] = new Tile(i, j, tileTypes.WALL);
     }
   }
@@ -90,7 +90,7 @@ function _addRooms(stage, rng, minSize, maxSize, attempts){
     
     var overlaps = false;
     for(var r = 0; r < stage.rooms.length; r++){
-      if(room.intersects(stage.rooms[r])){
+      if(room.intersects(stage.rooms[r])){ // instead of intersects, have at least a distance of 1
         overlaps = true;
         break;
       }
