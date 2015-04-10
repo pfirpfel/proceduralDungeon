@@ -9,10 +9,10 @@ module.exports = function(seed){
       from = 0;
     }
     var range = to - from;
-    return from + (mt.int() % (range + 1));
+    return from + (mt.int() % range);
   };
 
   this.isOneIn = function(all){
     return (mt.int() % (all + 1)) === 0;
-  }
-}
+  };
+};

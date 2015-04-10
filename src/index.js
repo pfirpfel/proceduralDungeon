@@ -4,11 +4,7 @@ var defaults = {
   cols: 200
 };
 var random = require('./random.js');
-/*
-console.log(rng.range(0, 100));
-console.log(rng.getIntUpTo(100));
-console.log(rng.isOneIn(10));
-*/
+
 var tileTypes = {
   WALL: 0,
   FLOOR: 1
@@ -38,7 +34,7 @@ function Room(x, y, width, height, tiles){
     && (this.x + this.width) < (other.x + other.width)
     && (this.y + this.height) > other.y
     && (this.y + this.height) < (other.y + other.height));
-  }
+  };
 }
 
 function Stage(rows, cols){
@@ -47,7 +43,7 @@ function Stage(rows, cols){
 
   this.tiles = [];
   for(var i = 0; i < rows; i++){
-    this.tiles[i] = []:
+    this.tiles[i] = [];
     for(var j = 0; j < cols; j++){
       this.tiles[i][j] = new Tile(i, j, tileTypes.WALL);
     }
@@ -65,13 +61,15 @@ function Dungeon(seed, rows, cols){
   this.stage = new Stage(this.rows, this.cols);
 
   var rng = new random(this.seed);
+  
+  _addRooms(this.stage, rng, 3, 9, 100);
 
 }
 
-function addRooms(stage, rng, minSize, maxSize, attempts){
+function _addRooms(stage, rng, minSize, maxSize, attempts){
   minSize = Math.max((minSize - 1) / 2, 1);
   maxSize = Math.max((maxSize - 1) / 2, minSize + 1);
-  
+
   for(var i = 0; i < attempts; i++){
     var size = rng.range(minSize, maxSize) * 2 + 1; // ensure odd size
     var rectangularity = rng.range(0, 1 + ~~(size /2)) * 2;
@@ -82,7 +80,6 @@ function addRooms(stage, rng, minSize, maxSize, attempts){
     } else {
       height += rectangularity;
     }
-    
     var x = rng.range(~~((stage.rows - width) / 2)) * 2 + 1;
     var y = rng.range(~~((stage.cols - height) / 2)) * 2 + 1;
     
@@ -90,7 +87,7 @@ function addRooms(stage, rng, minSize, maxSize, attempts){
     
     var overlaps = false;
     for(var r = 0; r < stage.rooms.length; r++){
-      if(room.intersects(stage.rooms[r]){
+      if(room.intersects(stage.rooms[r])){
         overlaps = true;
         break;
       }
@@ -110,4 +107,4 @@ function addRooms(stage, rng, minSize, maxSize, attempts){
   }  
 }
 
-
+module.exports = Dungeon;
